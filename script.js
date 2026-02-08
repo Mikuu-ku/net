@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.vibrate) navigator.vibrate(ms);
     };
 
-    // --- Sparkle Effect Function ---
+    // --- Sparkle Effect ---
     const createSparkle = (x, y) => {
         const sparkle = document.createElement('div');
         sparkle.innerHTML = '✨';
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sparkle.style.left = x + 'px';
         sparkle.style.top = y + 'px';
         sparkle.style.pointerEvents = 'none';
-        sparkle.style.zIndex = '4000';
+        sparkle.style.zIndex = '5002';
         sparkle.style.fontSize = '20px';
         sparkle.style.animation = 'fall 1s forwards';
         document.body.appendChild(sparkle);
@@ -86,9 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
             popupImg.src = flower.getAttribute('data-img');
             modalText.innerText = flower.getAttribute('data-note');
             
-            // Show Modal
+            // Show Photo Modal
             photoModal.classList.remove('modal-hidden');
-            photoModal.style.display = 'flex';
 
             if (clickedFlowers.size === totalFlowers) {
                 setTimeout(() => {
@@ -99,49 +98,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Modal Logic ---
-    const hidePhotoModal = () => {
+    // --- Closing Modals Logic ---
+    const closeModals = () => {
         photoModal.classList.add('modal-hidden');
-        photoModal.style.display = 'none';
+        letterModal.classList.remove('letter-modal-show');
     };
 
-    document.querySelector('.close-modal').addEventListener('click', (e) => {
-        e.stopPropagation();
-        hidePhotoModal();
-    });
+    document.querySelector('.close-modal').onclick = closeModals;
+    document.querySelector('.close-letter').onclick = closeModals;
 
-    document.querySelector('.close-letter').addEventListener('click', () => {
-        letterModal.classList.remove('letter-modal-show');
-    });
+    window.onclick = (e) => {
+        if (e.target === photoModal || e.target === letterModal) closeModals();
+    };
 
-    window.addEventListener('click', (e) => {
-        if (e.target === photoModal) hidePhotoModal();
-        if (e.target === letterModal) letterModal.classList.remove('letter-modal-show');
-    });
-
+    // --- Letter Logic ---
     if (finalLetterBtn) {
-        finalLetterBtn.addEventListener('click', () => {
+        finalLetterBtn.onclick = () => {
             letterModal.classList.add('letter-modal-show');
             triggerVibration(60);
-        });
+        };
+    }
+
+    // --- Mute Logic (Compact) ---
+    if (muteBtn) {
+        muteBtn.onclick = () => {
+            bgMusic.muted = !bgMusic.muted;
+            muteBtn.innerText = bgMusic.muted ? "🔇" : "🔊";
+        };
     }
 
     // --- Reset Logic ---
     if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
+        resetBtn.onclick = () => {
             bouquetPage.style.opacity = "0";
-            setTimeout(() => location.reload(), 800);
-        });
+            setTimeout(() => location.reload(), 500);
+        };
     }
 
     // --- Enhanced Particles ---
     setInterval(() => {
         const container = document.getElementById('heart-container');
-        if (!container) return;
+        if (!container || bouquetPage.classList.contains('hidden')) return;
+        
         const p = document.createElement('div');
-        p.classList.add('heart-particle');
+        p.className = 'heart-particle';
         const items = ['💚', '🌿', '🍃', '🌱', '✨'];
-        p.innerHTML = items[Math.floor(Math.random()*items.length)];
+        p.innerHTML = items[Math.floor(Math.random() * items.length)];
         p.style.left = Math.random() * 100 + 'vw';
         p.style.fontSize = (Math.random() * 15 + 10) + 'px';
         p.style.opacity = Math.random();
