@@ -20,22 +20,22 @@
 
 body { 
     height: 100vh; 
-    height: 100dvh; /* Uses Dynamic Viewport Height for mobile browsers */
+    height: 100dvh; 
     width: 100vw;
     overflow: hidden; 
     background: radial-gradient(circle, var(--mint-bg) 0%, var(--mint-shadow) 100%); 
-    font-family: 'Georgia', 'Times New Roman', serif; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    font-family: 'Georgia', 'Times New Roman', serif;
+    position: relative; /* Base for absolute children */
 }
 
+/* THE CENTERING FIX: Using Absolute Positioning for Messenger Browsers */
 .main-container {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0; /* fills the whole screen */
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
 }
 
 #envelope-page {
@@ -48,12 +48,38 @@ body {
     transition: opacity 0.8s;
 }
 
+/* --- Loading Screen (Fixed Z-Index) --- */
+#loading-screen {
+    position: fixed; 
+    inset: 0;
+    background: var(--mint-bg); 
+    z-index: 10000; /* Must be higher than everything */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    transition: opacity 1s ease-out, visibility 1s;
+}
+
+#loading-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-leaf { font-size: 50px; animation: pulseLoader 1.5s infinite; }
+.loading-text { margin-top: 15px; color: var(--forest); font-style: italic; }
+
+@keyframes pulseLoader {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+
 /* --- Envelope Logic --- */
 .envelope-wrapper { 
     position: relative; 
     width: 320px; 
     height: 220px; 
-    margin: 0 auto 40px auto; /* Centered horizontally with auto margins */
+    margin-bottom: 40px; 
 }
 .envelope-back { position: absolute; width: 100%; height: 100%; background: #40916c; border-radius: 0 0 15px 15px; z-index: 1; }
 .paper { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 85%; background: white; z-index: 2; padding: 30px 15px; border-radius: 5px; text-align: center; transition: 0.8s; }
@@ -126,7 +152,11 @@ body {
 /* --- UI Buttons & Text --- */
 .main-title { color: var(--emerald); font-size: 2.8rem; font-weight: bold; margin-top: 20px; }
 .subtitle { color: var(--forest); font-style: italic; font-size: 1.1rem; margin-bottom: 20px; }
-.instruction { color: var(--forest); font-size: 1rem; font-weight: bold; font-style: italic; text-align: center; animation: textFade 2s infinite alternate; }
+.instruction { 
+    color: var(--forest); font-size: 1rem; font-weight: bold; font-style: italic; 
+    text-align: center; animation: textFade 2s infinite alternate;
+    width: 90%; max-width: 300px; /* Prevents text pushing the container */
+}
 
 .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
 .btn-primary { 
@@ -141,14 +171,13 @@ body {
 
 /* --- Modals --- */
 #photo-modal, #letter-modal {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9000;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 11000;
     display: flex; justify-content: center; align-items: center;
     backdrop-filter: blur(8px); transition: 0.5s;
 }
 .modal-hidden, .letter-modal-hidden { visibility: hidden; opacity: 0; pointer-events: none; }
 .letter-modal-show { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
 
-/* Fixed Close Buttons Placement - Corner Version */
 .polaroid-container, .letter-content {
     position: relative;
     width: 90%;
@@ -172,7 +201,7 @@ body {
 .photo-area img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: sepia(0.2) contrast(1.1); }
 #modal-text { font-family: 'Brush Script MT', cursive; font-size: 1.5rem; color: #333; text-align: center; margin-top: 10px; }
 
-/* THE "CORNER" CLOSE BUTTON */
+/* CLOSE BUTTONS */
 .close-modal, .close-letter { 
     position: absolute; 
     top: -20px; 
@@ -180,7 +209,7 @@ body {
     font-size: 24px; 
     color: white; 
     cursor: pointer; 
-    z-index: 9999; 
+    z-index: 12000; 
     background: var(--emerald);
     border: 2px solid var(--sage);
     border-radius: 50%; width: 40px; height: 40px; 
@@ -189,9 +218,7 @@ body {
     transition: transform 0.2s;
 }
 
-.close-modal:hover, .close-letter:hover {
-    transform: scale(1.1);
-}
+.close-modal:hover, .close-letter:hover { transform: scale(1.1); }
 
 .letter-content { max-width: 420px; }
 .letter-paper { 
