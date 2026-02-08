@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Pinalangga 🌿</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader-leaf">🌿</div>
+        <p class="loading-text">Preparing your surprise...</p>
+    </div>
+
+    <audio id="openSound" src="audio/paper_rustling.mp3"></audio>
+    <audio id="magicSound" src="audio/chime.mp3"></audio>
+    <audio id="bgMusic" src="audio/Pasilyo.mp3" loop></audio>
+
+    <div id="heart-container"></div>
+    <button id="muteBtn" class="mute-style">🔊</button>
+
+    <div id="photo-modal" class="modal-hidden">
+        <div class="polaroid-container">
+            <span class="close-modal">&times;</span>
+            <div class="polaroid-card">
+                <div class="photo-area">
+                    <img id="popup-img" src="" alt="Memory">
+                </div>
+                <div class="caption-area">
+                    <p id="modal-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="letter-modal" class="letter-modal-hidden">
+        <div class="letter-content">
+            <span class="close-letter">&times;</span>
+            <div class="letter-paper">
+                <h2>My Dearest Pinalangga,</h2>
+                <p>
+                    Alam ko hindi ako expressive na pagkatao,
+                    pero gusto kong malaman mo na sobrang mahalaga
+                    ka sakin. I love you so much, babyy.
+                </p>
+                <p>Thank you for being my constant. Happy Valentine's Day! 💚</p>
+                <p class="signature">- Nate</p>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-container">
+        <section id="envelope-page">
+            <div class="envelope-wrapper" id="wrapper">
+                <div class="envelope-back"></div>
+                <div class="paper">
+                    <p class="paper-text">I have a little surprise waiting for you...</p>
+                    <p class="names">To: My Pinalangga 💚</p>
+                    <p class="names">From: Nate</p>
+                </div>
+                <div class="envelope-front"></div>
+                <div class="flap"></div>
+                <button class="seal" id="sealButton">🌿</button>
+            </div>
+            <h2 class="instruction">TAP THE LEAF TO OPEN YOUR GIFT</h2>
+        </section>
+
+        <section id="bouquet-page" class="hidden">
+            <div class="bouquet-display">
+                <div class="fairy-lights"></div>
+                <div class="bouquet" id="mainBouquet">
+                    <div class="flower orchid interactive" data-note="Still my favorite co-op partner." data-img="images/genshin1.1.png"> 
+                         <div class="orchid-center"></div>
+                    </div>
+                    <div class="flower tulip t-left interactive" data-note="To many more adventures." data-img="images/genshin1.2.png"></div>
+                    <div class="flower tulip t-right interactive" data-note="Sweet naman, naol." data-img="images/roblox3.jpg"></div>
+                    <div class="flower rose r-left interactive" data-note="Cute natin dito oh." data-img="images/roblox2.jpg">
+                        <div class="rose-inner"></div>
+                    </div>
+                    <div class="flower rose r-right interactive" data-note="Just us being chaotic as usual." data-img="images/roblox1.png">
+                        <div class="rose-inner"></div>
+                    </div>
+                    <div class="stem">
+                        <div class="leaf leaf-left"></div>
+                        <div class="leaf leaf-right"></div>
+                    </div>
+                </div>
+                <div class="text-content">
+                    <h1 class="main-title">Happy Valentine's Day!</h1>
+                    <p class="subtitle">Tap the flowers to unlock our memories.</p>
+                    <div class="button-group">
+                        <button id="final-letter-btn" class="btn-primary hidden">Read My Letter ✉️</button>
+                        <button id="resetBtn" class="btn-primary secondary">Back to Start</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
