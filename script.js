@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalLetterBtn = document.getElementById('final-letter-btn');
     const popupImg = document.getElementById('popup-img');
     const modalText = document.getElementById('modal-text');
+    const typewriterElement = document.getElementById('typewriter-text');
 
     // Tracking
     let clickedFlowers = new Set();
@@ -45,14 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const sparkle = document.createElement('div');
         sparkle.innerHTML = '✨';
         sparkle.style.position = 'fixed';
-        sparkle.style.left = x + 'px';
-        sparkle.style.top = y + 'px';
+        sparkle.style.left = (x || Math.random() * window.innerWidth) + 'px';
+        sparkle.style.top = (y || Math.random() * window.innerHeight) + 'px';
         sparkle.style.pointerEvents = 'none';
-        sparkle.style.zIndex = '5002';
+        sparkle.style.zIndex = '9999';
         sparkle.style.fontSize = '20px';
-        sparkle.style.animation = 'fall 1s forwards';
+        sparkle.style.animation = 'fall 1.5s forwards';
         document.body.appendChild(sparkle);
-        setTimeout(() => sparkle.remove(), 1000);
+        setTimeout(() => sparkle.remove(), 1500);
     };
 
     // --- Envelope Logic ---
@@ -86,40 +87,70 @@ document.addEventListener('DOMContentLoaded', () => {
             popupImg.src = flower.getAttribute('data-img');
             modalText.innerText = flower.getAttribute('data-note');
             
-            // Show Photo Modal
             photoModal.classList.remove('modal-hidden');
 
             if (clickedFlowers.size === totalFlowers) {
                 setTimeout(() => {
                     finalLetterBtn.classList.remove('hidden');
                     triggerVibration([50, 100, 50]);
-                }, 1000);
+                }, 800);
             }
         });
     });
 
-    // --- Closing Modals Logic ---
+    const message = "Alam ko hindi ako expressive na pagkatao, pero gusto kong malaman mo na sobrang mahalaga ka sakin. I love you so much, babyy. Happy Valentine's Day! 💚";
+    let isTyping = false;
+    let charIndex = 0;
+
+    function startTypewriter() {
+        if (charIndex < message.length) {
+            typewriterElement.innerHTML += message.charAt(charIndex);
+            charIndex++;
+            setTimeout(startTypewriter, 50);
+        } else {
+            const sig = document.querySelector('.signature');
+            if(sig) sig.style.opacity = '1';
+        }
+    }
+
+    if (finalLetterBtn) {
+        finalLetterBtn.onclick = () => {
+            letterModal.classList.add('letter-modal-show');
+            triggerVibration(60);
+            if (!isTyping) {
+                isTyping = true;
+                setTimeout(startTypewriter, 1000);
+            }
+        };
+    }
+
     const closeModals = () => {
         photoModal.classList.add('modal-hidden');
         letterModal.classList.remove('letter-modal-show');
     };
 
-    document.querySelector('.close-modal').onclick = closeModals;
-    document.querySelector('.close-letter').onclick = closeModals;
+    document.querySelectorAll('.close-modal, .close-letter').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            closeModals();
+        };
+    });
 
     window.onclick = (e) => {
         if (e.target === photoModal || e.target === letterModal) closeModals();
     };
 
-    // --- Letter Logic ---
-    if (finalLetterBtn) {
-        finalLetterBtn.onclick = () => {
-            letterModal.classList.add('letter-modal-show');
-            triggerVibration(60);
-        };
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', (event) => {
+            const bouquet = document.querySelector('.bouquet');
+            if (bouquet && !bouquetPage.classList.contains('hidden')) {
+                const tiltX = Math.round(event.gamma) / 2;
+                const tiltY = Math.round(event.beta) / 4;
+                bouquet.style.transform = `rotateY(${tiltX}deg) rotateX(${-tiltY}deg)`;
+            }
+        });
     }
 
-    // --- Mute Logic (Compact) ---
     if (muteBtn) {
         muteBtn.onclick = () => {
             bgMusic.muted = !bgMusic.muted;
@@ -127,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- Reset Logic ---
     if (resetBtn) {
         resetBtn.onclick = () => {
             bouquetPage.style.opacity = "0";
@@ -135,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- Enhanced Particles ---
     setInterval(() => {
         const container = document.getElementById('heart-container');
         if (!container || bouquetPage.classList.contains('hidden')) return;
@@ -150,5 +179,5 @@ document.addEventListener('DOMContentLoaded', () => {
         p.style.animation = `fall ${(Math.random() * 3 + 4)}s linear forwards`;
         container.appendChild(p);
         setTimeout(() => p.remove(), 7000);
-    }, 400);
+    }, 450);
 });
