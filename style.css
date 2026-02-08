@@ -213,16 +213,16 @@ body {
 .bouquet { 
     position: relative; 
     width: 250px; 
-    height: 350px; /* Fixed height to prevent "growing" glitch */
+    height: 350px; 
     z-index: 10; 
     margin: 15px 0;
-    transition: none !important; /* Forces no transition on the container itself */
+    transition: none !important; 
 }
 
 .flower { border: 2.2px dashed rgba(255,255,255,0.4); cursor: pointer; transition: transform 0.3s ease; }
 .flower:hover { transform: scale(1.1) rotate(5deg); filter: brightness(1.2); }
 
-/* --- Flower Shapes Fixes (Orchid in Stem) --- */
+/* --- Flower Shapes Fixes --- */
 .orchid { 
     position: absolute; 
     top: 40px; 
@@ -324,7 +324,7 @@ body {
     border: 1.5px solid var(--forest); 
 }
 
-/* --- MODAL & POPUP FIXES --- */
+/* --- MODAL & POPUP --- */
 #photo-modal, #letter-modal {
     position: fixed; 
     inset: 0; 
@@ -360,7 +360,6 @@ body {
 .photo-area img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: sepia(0.1) contrast(1.1); }
 #modal-text { font-family: 'Brush Script MT', cursive; font-size: 1.4rem; color: #333; text-align: center; margin-top: 10px; }
 
-/* FIX: Close button pinned to top-right of the screen */
 .close-modal, .close-letter { 
     position: fixed; 
     top: 25px; 
@@ -388,6 +387,8 @@ body {
     color: #333; 
     line-height: 1.5;
     width: 100%;
+    max-height: 80vh; /* Prevents overflow on short mobile screens */
+    overflow-y: auto;
 }
 
 .signature { 
@@ -398,6 +399,7 @@ body {
     opacity: 0; 
     transition: opacity 2s ease-in;
     text-align: right;
+    word-break: break-word; /* Prevents long names from breaking layout */
 }
 
 #typewriter-text::after { content: '|'; animation: blink 0.7s infinite; color: var(--forest); }
@@ -434,6 +436,9 @@ body {
     .btn-primary { width: 100%; min-width: 0; }
     .close-modal, .close-letter { top: 15px; right: 15px; font-size: 32px; }
     .polaroid-card { max-width: 280px; }
+    
+    .signature { font-size: 1.6rem; margin-top: 15px; }
+    .letter-paper { padding: 20px 15px; }
 }
 
 @media (max-height: 700px) {
