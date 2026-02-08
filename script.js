@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sparkle.style.left = (x || Math.random() * window.innerWidth) + 'px';
         sparkle.style.top = (y || Math.random() * window.innerHeight) + 'px';
         sparkle.style.pointerEvents = 'none';
-        sparkle.style.zIndex = '15000'; // High z-index to stay above modals
+        sparkle.style.zIndex = '25000'; // High z-index to stay above everything
         sparkle.style.fontSize = '20px';
         sparkle.style.animation = 'fall 1.5s forwards';
         document.body.appendChild(sparkle);
@@ -69,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
             triggerVibration(100);
             createSparkle(e.clientX, e.clientY);
             
-            // Audio play (standard mobile browser requirement: play on user click)
+            // Audio play
             if (openSound) openSound.play();
             if (bgMusic) {
-                bgMusic.volume = 0.6; // Set a nice background volume
+                bgMusic.volume = 0.6;
                 bgMusic.play().catch(err => console.log("Music play blocked:", err));
             }
 
@@ -84,13 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     envelopePage.style.display = "none";
                     bouquetPage.classList.remove('hidden');
-                    // Small delay to allow the "hidden" removal to register for the opacity transition
                     setTimeout(() => {
                         bouquetPage.style.opacity = "1";
                         if (magicSound) magicSound.play();
                     }, 50);
                 }, 800);
-            }, 2200);
+            }, 2500); // Slightly longer to let her read the "Time Together"
         });
     }
 
@@ -129,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (charIndex < message.length) {
             typewriterElement.innerHTML += message.charAt(charIndex);
             charIndex++;
-            setTimeout(startTypewriter, 55); // Adjusted speed slightly for readability
+            setTimeout(startTypewriter, 55);
         } else {
             const sig = document.querySelector('.signature');
             if(sig) sig.style.opacity = '1';
@@ -143,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 triggerVibration(60);
                 if (!isTyping) {
                     isTyping = true;
-                    // Wait 1s after modal opens before typing starts
                     setTimeout(startTypewriter, 1000);
                 }
             }
@@ -163,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
 
-    // Close on background click
     window.onclick = (e) => {
         if (e.target === photoModal || e.target === letterModal) closeModals();
     };
@@ -172,16 +169,40 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', (event) => {
             const bouquet = document.querySelector('.bouquet');
-            // Only tilt if bouquet page is visible
             if (bouquet && bouquetPage && !bouquetPage.classList.contains('hidden')) {
-                const tiltX = Math.round(event.gamma) / 2; // Horizontal tilt
-                const tiltY = Math.round(event.beta) / 4;  // Vertical tilt
+                const tiltX = Math.round(event.gamma) / 2;
+                const tiltY = Math.round(event.beta) / 4;
                 bouquet.style.transform = `rotateY(${tiltX}deg) rotateX(${-tiltY}deg)`;
             }
         });
     }
 
-    // --- Mute Logic ---
+    function updateCounter() {
+        const anniversaryDate = new Date(2022, 9, 2, 0, 0); 
+        const now = new Date();
+        const diffInMs = now - anniversaryDate;
+        
+        const totalMinutes = Math.floor(diffInMs / (1000 * 60));
+        const totalHours = Math.floor(totalMinutes / 60);
+        const totalDays = Math.floor(totalHours / 24);
+
+        const years = Math.floor(totalDays / 365);
+        const remainingDays = totalDays % 365;
+        const remainingHours = totalHours % 24;
+        const remainingMins = totalMinutes % 60;
+
+        const counterElement = document.getElementById('days-value');
+        if (counterElement) {
+            let timeString = "";
+            if (years > 0) timeString += `${years}y `;
+            timeString += `${remainingDays}d ${remainingHours}h ${remainingMins}m`;
+            counterElement.innerText = timeString + " Together";
+        }
+    }
+
+    updateCounter();
+    setInterval(updateCounter, 60000);
+
     if (muteBtn) {
         muteBtn.onclick = () => {
             if (bgMusic) {
@@ -191,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- Reset Logic ---
     if (resetBtn) {
         resetBtn.onclick = () => {
             bouquetPage.style.opacity = "0";
@@ -199,10 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- Falling Particles (Leaves & Hearts) ---
     setInterval(() => {
         const container = document.getElementById('heart-container');
-        // Only spawn if bouquet is showing
         if (!container || !bouquetPage || bouquetPage.classList.contains('hidden')) return;
         
         const p = document.createElement('div');
@@ -214,8 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
         p.style.opacity = Math.random();
         p.style.animation = `fall ${(Math.random() * 3 + 4)}s linear forwards`;
         container.appendChild(p);
-        
-        // Cleanup particle
         setTimeout(() => p.remove(), 7000);
     }, 450);
 });

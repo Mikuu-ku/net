@@ -25,13 +25,13 @@ body {
     overflow: hidden; 
     background: radial-gradient(circle, var(--mint-bg) 0%, var(--mint-shadow) 100%); 
     font-family: 'Georgia', 'Times New Roman', serif;
-    position: relative; /* Base for absolute children */
+    position: relative;
 }
 
 /* THE CENTERING FIX: Using Absolute Positioning for Messenger Browsers */
 .main-container {
     position: absolute;
-    inset: 0; /* fills the whole screen */
+    inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,12 +48,12 @@ body {
     transition: opacity 0.8s;
 }
 
-/* --- Loading Screen (Fixed Z-Index) --- */
+/* --- Loading Screen --- */
 #loading-screen {
     position: fixed; 
     inset: 0;
     background: var(--mint-bg); 
-    z-index: 10000; /* Must be higher than everything */
+    z-index: 15000;
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
@@ -74,17 +74,68 @@ body {
     50% { transform: scale(1.2); opacity: 0.7; }
 }
 
-/* --- Envelope Logic --- */
+/* --- Envelope & Counter Logic --- */
 .envelope-wrapper { 
     position: relative; 
     width: 320px; 
     height: 220px; 
     margin-bottom: 40px; 
 }
-.envelope-back { position: absolute; width: 100%; height: 100%; background: #40916c; border-radius: 0 0 15px 15px; z-index: 1; }
-.paper { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 85%; background: white; z-index: 2; padding: 30px 15px; border-radius: 5px; text-align: center; transition: 0.8s; }
-.paper-text { font-style: italic; color: var(--forest); font-size: 0.95rem; }
-.names { font-weight: bold; color: var(--emerald); margin-top: 8px; font-size: 1.1rem; }
+
+.envelope-back { 
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
+    background: #40916c; 
+    border-radius: 0 0 15px 15px; 
+    z-index: 1; 
+}
+
+.paper { 
+    position: absolute; 
+    bottom: 10px; 
+    left: 5%; 
+    width: 90%; 
+    height: 90%; 
+    background: white; 
+    z-index: 2; 
+    padding: 20px 10px; 
+    border-radius: 5px; 
+    text-align: center; 
+    transition: 0.8s; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* --- Together Counter Styling --- */
+.counter-style {
+    margin: 5px 0;
+    padding: 8px 5px;
+    background: rgba(149, 213, 178, 0.15);
+    border-radius: 8px;
+    border: 1px dashed var(--sage);
+    animation: heartbeat 2s infinite ease-in-out;
+}
+
+#days-value {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--emerald);
+    letter-spacing: 0.5px;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+.paper-text { font-style: italic; color: var(--forest); font-size: 0.85rem; }
+.names-container { margin-top: 5px; }
+.names { font-weight: bold; color: var(--emerald); font-size: 1rem; line-height: 1.2; }
+
 .envelope-front { position: absolute; width: 100%; height: 100%; background: #40916c; z-index: 3; clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0% 100%); border-radius: 0 0 15px 15px; }
 .flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--forest); clip-path: polygon(0 0, 100% 0, 50% 50%); z-index: 4; transform-origin: top; transition: 0.6s; }
 
@@ -103,11 +154,21 @@ body {
 }
 
 .open .flap { transform: rotateX(180deg); z-index: 1; }
-.open .paper { transform: translateY(-120px); z-index: 4; }
+.open .paper { transform: translateY(-130px); z-index: 4; }
 .open .seal { opacity: 0; pointer-events: none; }
 
 /* --- Bouquet Display --- */
 .hidden { display: none !important; opacity: 0; }
+
+#bouquet-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease;
+}
+
 .bouquet-display { 
     position: relative; 
     display: flex; 
@@ -115,53 +176,54 @@ body {
     align-items: center; 
     text-align: center; 
     width: 100%; 
-    transition: opacity 0.8s ease;
 }
 
 .fairy-lights { 
-    position: absolute; top: 130px; left: 50%; transform: translate(-50%, -50%); 
-    width: 350px; height: 350px; border-radius: 50%; 
+    position: absolute; top: 120px; left: 50%; transform: translate(-50%, -50%); 
+    width: 320px; height: 320px; border-radius: 50%; 
     background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%); 
-    box-shadow: 0 0 60px 10px var(--gold-glow); z-index: -1; 
+    box-shadow: 0 0 50px 10px var(--gold-glow); z-index: -1; 
     animation: pulseGlow 3s infinite alternate; pointer-events: none;
 }
 
 .bouquet { 
-    position: relative; width: 250px; height: 320px; z-index: 10; margin-top: 20px;
+    position: relative; width: 250px; height: 300px; z-index: 10; margin-top: 10px;
     transition: transform 0.1s ease-out; 
 }
-.flower { border: 2.5px dashed rgba(255,255,255,0.5); cursor: pointer; transition: 0.3s; }
+
+.flower { border: 2.2px dashed rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; }
 .flower:hover { transform: scale(1.1) rotate(5deg); filter: brightness(1.2); }
 
 /* Flower Shapes */
-.orchid { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 110px; height: 90px; background: #40916c; border-radius: 50% 50% 45% 45%; z-index: 5; }
-.orchid-center { position: absolute; top: 35%; left: 25%; width: 55px; height: 40px; background: #d8f3dc; border-radius: 50%; border: 2px dashed #40916c; }
-.tulip { position: absolute; width: 65px; height: 90px; background: #74c69d; border-radius: 50% 50% 20% 20%; }
-.t-left { left: 0px; top: 60px; transform: rotate(-25deg); }
-.t-right { right: 0px; top: 60px; transform: rotate(25deg); }
-.rose { position: absolute; width: 75px; height: 75px; background: var(--forest); border-radius: 50%; }
+.orchid { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 80px; background: #40916c; border-radius: 50% 50% 45% 45%; z-index: 5; }
+.orchid-center { position: absolute; top: 35%; left: 25%; width: 50px; height: 35px; background: #d8f3dc; border-radius: 50%; border: 2px dashed #40916c; }
+.tulip { position: absolute; width: 60px; height: 85px; background: #74c69d; border-radius: 50% 50% 20% 20%; }
+.t-left { left: 0px; top: 50px; transform: rotate(-25deg); }
+.t-right { right: 0px; top: 50px; transform: rotate(25deg); }
+.rose { position: absolute; width: 70px; height: 70px; background: var(--forest); border-radius: 50%; }
 .rose-inner { position: absolute; top: 20%; left: 20%; width: 60%; height: 60%; border-radius: 50%; border: 3px dotted var(--sage); }
-.r-left { left: 30px; top: 130px; z-index: 4; }
-.r-right { right: 30px; top: 130px; z-index: 4; }
+.r-left { left: 30px; top: 110px; z-index: 4; }
+.r-right { right: 30px; top: 110px; z-index: 4; }
 
-.stem { position: absolute; bottom: -40px; left: 50%; width: 14px; height: 240px; background: var(--emerald); transform: translateX(-50%); z-index: 0; border-radius: 10px; }
-.leaf { position: absolute; width: 55px; height: 28px; background: var(--emerald); border-radius: 50% 0; }
-.leaf-left { left: -45px; top: 60px; transform: rotate(-30deg); }
-.leaf-right { right: -45px; top: 100px; transform: rotate(120deg); }
+.stem { position: absolute; bottom: -30px; left: 50%; width: 12px; height: 220px; background: var(--emerald); transform: translateX(-50%); z-index: 0; border-radius: 10px; }
+.leaf { position: absolute; width: 50px; height: 25px; background: var(--emerald); border-radius: 50% 0; }
+.leaf-left { left: -40px; top: 60px; transform: rotate(-30deg); }
+.leaf-right { right: -40px; top: 90px; transform: rotate(120deg); }
 
 /* --- UI Buttons & Text --- */
-.main-title { color: var(--emerald); font-size: 2.8rem; font-weight: bold; margin-top: 20px; }
-.subtitle { color: var(--forest); font-style: italic; font-size: 1.1rem; margin-bottom: 20px; }
+.main-title { color: var(--emerald); font-size: 2.2rem; font-weight: bold; margin-top: 15px; padding: 0 10px; }
+.subtitle { color: var(--forest); font-style: italic; font-size: 1rem; margin-bottom: 15px; }
 .instruction { 
-    color: var(--forest); font-size: 1rem; font-weight: bold; font-style: italic; 
+    color: var(--forest); font-size: 0.9rem; font-weight: bold; font-style: italic; 
     text-align: center; animation: textFade 2s infinite alternate;
-    width: 90%; max-width: 300px; /* Prevents text pushing the container */
+    width: 90%; max-width: 300px;
 }
 
-.button-group { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
+.button-group { display: flex; gap: 12px; justify-content: center; margin-top: 10px; width: 90%; }
 .btn-primary { 
     background: var(--emerald); color: white; border: 1.5px solid var(--sage); 
-    padding: 12px 30px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s;
+    padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s;
+    font-size: 0.9rem; flex: 1; max-width: 170px;
 }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 6px 15px var(--leaf-glow); }
 .btn-primary.secondary { background: transparent; color: var(--forest); border: 1.5px solid var(--forest); }
@@ -171,9 +233,9 @@ body {
 
 /* --- Modals --- */
 #photo-modal, #letter-modal {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 11000;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 20000;
     display: flex; justify-content: center; align-items: center;
-    backdrop-filter: blur(8px); transition: 0.5s;
+    backdrop-filter: blur(5px); transition: 0.5s;
 }
 .modal-hidden, .letter-modal-hidden { visibility: hidden; opacity: 0; pointer-events: none; }
 .letter-modal-show { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
@@ -181,58 +243,53 @@ body {
 .polaroid-container, .letter-content {
     position: relative;
     width: 90%;
-    max-width: 340px;
+    max-width: 330px;
     display: flex;
     justify-content: center;
 }
 
 .polaroid-card { 
-    background: #fff; padding: 12px 12px 40px 12px; 
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6); 
+    background: #fff; padding: 10px 10px 35px 10px; 
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6); 
     transform: rotate(-2deg); width: 100%;
     border-radius: 2px; animation: polaroidFloat 3s ease-in-out infinite;
 }
 
 @keyframes polaroidFloat {
     0%, 100% { transform: rotate(-2deg) translateY(0); }
-    50% { transform: rotate(1deg) translateY(-10px); }
+    50% { transform: rotate(1deg) translateY(-8px); }
 }
 
-.photo-area img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: sepia(0.2) contrast(1.1); }
-#modal-text { font-family: 'Brush Script MT', cursive; font-size: 1.5rem; color: #333; text-align: center; margin-top: 10px; }
+.photo-area img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: sepia(0.1) contrast(1.1); }
+#modal-text { font-family: 'Brush Script MT', cursive; font-size: 1.4rem; color: #333; text-align: center; margin-top: 10px; }
 
 /* CLOSE BUTTONS */
 .close-modal, .close-letter { 
     position: absolute; 
-    top: -20px; 
-    right: -20px; 
-    font-size: 24px; 
+    top: -45px; 
+    right: 0px; 
+    font-size: 30px; 
     color: white; 
     cursor: pointer; 
-    z-index: 12000; 
-    background: var(--emerald);
-    border: 2px solid var(--sage);
-    border-radius: 50%; width: 40px; height: 40px; 
+    z-index: 22000; 
+    width: 40px; height: 40px; 
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.2s;
 }
 
-.close-modal:hover, .close-letter:hover { transform: scale(1.1); }
-
-.letter-content { max-width: 420px; }
+.letter-content { max-width: 400px; }
 .letter-paper { 
-    background: var(--paper-white); padding: 40px 30px; border-radius: 2px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: #333; line-height: 1.6;
+    background: var(--paper-white); padding: 30px 25px; border-radius: 2px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: #333; line-height: 1.5;
     width: 100%;
 }
-.letter-paper h2 { color: var(--emerald); margin-bottom: 20px; font-size: 1.5rem; }
+.letter-paper h2 { color: var(--emerald); margin-bottom: 15px; font-size: 1.3rem; }
+.letter-body { font-size: 0.95rem; min-height: 100px; }
 
 /* Signature Styling */
 .signature { 
-    margin-top: 30px; 
+    margin-top: 25px; 
     font-family: 'Brush Script MT', cursive; 
-    font-size: 2.5rem; 
+    font-size: 2.2rem; 
     color: var(--forest); 
     opacity: 0; 
     transition: opacity 2s ease-in;
@@ -242,33 +299,33 @@ body {
 #typewriter-text::after { content: '|'; animation: blink 0.7s infinite; color: var(--forest); }
 
 .mute-style { 
-    position: fixed; bottom: 20px; right: 20px; background: var(--emerald); 
-    border: 2px solid var(--sage); border-radius: 50%; width: 45px; height: 45px; 
-    color: white; cursor: pointer; z-index: 8000; display: flex; align-items: center; justify-content: center;
+    position: fixed; bottom: 15px; right: 15px; background: var(--emerald); 
+    border: 2px solid var(--sage); border-radius: 50%; width: 42px; height: 42px; 
+    color: white; cursor: pointer; z-index: 10000; display: flex; align-items: center; justify-content: center;
 }
 
-/* --- Responsive Layout --- */
+/* --- Responsive Layout Adjustments --- */
 @media (max-width: 480px) {
-    .envelope-wrapper { width: 280px; height: 190px; margin-bottom: 30px; }
-    .main-title { font-size: 1.8rem; margin-top: 10px; }
-    .subtitle { font-size: 1rem; margin-bottom: 10px; }
-    .bouquet { transform: scale(0.75); height: 240px; margin-top: 0; }
-    .fairy-lights { width: 250px; height: 250px; top: 110px; }
-    .button-group { flex-direction: column; align-items: center; gap: 10px; }
-    .polaroid-card { padding: 10px 10px 35px 10px; }
-    #modal-text { font-size: 1.2rem; }
-    .letter-paper { padding: 25px 20px; }
-    .letter-paper h2 { font-size: 1.3rem; }
+    .envelope-wrapper { width: 280px; height: 190px; }
+    .paper { padding: 15px 5px; }
+    #days-value { font-size: 0.85rem; }
     
-    .close-modal, .close-letter { 
-        top: -15px; 
-        right: -5px; 
-        width: 35px; 
-        height: 35px; 
-        font-size: 20px;
-    }
+    .main-title { font-size: 1.8rem; }
+    .subtitle { font-size: 0.9rem; }
     
-    .mute-style { width: 40px; height: 40px; bottom: 15px; right: 15px; }
+    .bouquet { transform: scale(0.8); height: 260px; margin-top: 0; }
+    .fairy-lights { width: 260px; height: 260px; top: 100px; }
+    
+    .button-group { flex-direction: row; align-items: center; gap: 8px; }
+    .btn-primary { padding: 10px 12px; font-size: 0.8rem; }
+}
+
+/* Special fix for very short screens (like iPhone SE) */
+@media (max-height: 667px) {
+    .main-title { font-size: 1.6rem; margin-top: 5px; }
+    .bouquet { transform: scale(0.7); height: 240px; }
+    .envelope-wrapper { transform: scale(0.85); margin-bottom: 20px; }
+    .instruction { font-size: 0.8rem; }
 }
 
 /* --- Animations --- */

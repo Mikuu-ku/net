@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nate🌿</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
 </head>
 <body>
+
     <div id="loading-screen">
         <div class="loader-leaf">🌿</div>
         <p class="loading-text">Preparing your surprise...</p>
@@ -24,7 +25,9 @@
         <div class="polaroid-container">
             <span class="close-modal">&times;</span>
             <div class="polaroid-card">
-                <div class="photo-area"><img id="popup-img" src=""></div>
+                <div class="photo-area">
+                    <img id="popup-img" src="" alt="Memory">
+                </div>
                 <p id="modal-text"></p>
             </div>
         </div>
@@ -42,14 +45,24 @@
     </div>
 
     <main class="main-container">
+        
         <section id="envelope-page">
             <div class="envelope-wrapper" id="wrapper">
                 <div class="envelope-back"></div>
+                
                 <div class="paper">
                     <p class="paper-text">I have a little surprise waiting for you...</p>
-                    <p class="names">To: My Pinalangga 💚</p>
-                    <p class="names">From: Nate</p>
+                    
+                    <div id="together-counter" class="counter-style">
+                        <span id="days-value">Loading memories...</span>
+                    </div>
+
+                    <div class="names-container">
+                        <p class="names">To: My Pinalangga 💚</p>
+                        <p class="names">From: Nate</p>
+                    </div>
                 </div>
+
                 <div class="envelope-front"></div>
                 <div class="flap"></div>
                 <button class="seal" id="sealButton">🌿</button>
@@ -60,18 +73,34 @@
         <section id="bouquet-page" class="hidden">
             <div class="bouquet-display">
                 <div class="fairy-lights"></div>
+                
                 <div class="bouquet" id="mainBouquet">
-                    <div class="flower orchid interactive" data-note="Still my favorite co-op partner." data-img="images/genshin1.1.png"> 
+                    <div class="flower orchid interactive" 
+                         data-note="Still my favorite co-op partner." 
+                         data-img="images/genshin1.1.png"> 
                          <div class="orchid-center"></div>
                     </div>
-                    <div class="flower tulip t-left interactive" data-note="To many more adventures." data-img="images/heartopia.jpg"></div>
-                    <div class="flower tulip t-right interactive" data-note="Sweet naman, naol." data-img="images/roblox3.jpg"></div>
-                    <div class="flower rose r-left interactive" data-note="Cute natin dito oh." data-img="images/roblox2.jpg">
+
+                    <div class="flower tulip t-left interactive" 
+                         data-note="To many more adventures." 
+                         data-img="images/heartopia.jpg"></div>
+                    
+                    <div class="flower tulip t-right interactive" 
+                         data-note="Sweet naman, naol." 
+                         data-img="images/roblox3.jpg"></div>
+
+                    <div class="flower rose r-left interactive" 
+                         data-note="Cute natin dito oh." 
+                         data-img="images/roblox2.jpg">
                         <div class="rose-inner"></div>
                     </div>
-                    <div class="flower rose r-right interactive" data-note="Just us being chaotic as usual." data-img="images/roblox1.png">
+                    
+                    <div class="flower rose r-right interactive" 
+                         data-note="Just us being chaotic as usual." 
+                         data-img="images/roblox1.png">
                         <div class="rose-inner"></div>
                     </div>
+                    
                     <div class="stem">
                         <div class="leaf leaf-left"></div>
                         <div class="leaf leaf-right"></div>
