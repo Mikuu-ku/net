@@ -2,11 +2,18 @@
  * Nate's Valentine Surprise - script.js
  */
 
+// --- 1. Loading Screen Logic ---
 window.addEventListener('load', () => {
     const loader = document.getElementById('loading-screen');
     if (loader) {
-        loader.style.opacity = '0';
-        setTimeout(() => loader.style.display = 'none', 1000);
+        // Give it a 1.5s delay so she can see the cute loading leaf
+        setTimeout(() => {
+            loader.classList.add('fade-out');
+            // Remove from DOM after transition so it doesn't block clicks
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 1000);
+        }, 1500);
     }
 });
 
@@ -49,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sparkle.style.left = (x || Math.random() * window.innerWidth) + 'px';
         sparkle.style.top = (y || Math.random() * window.innerHeight) + 'px';
         sparkle.style.pointerEvents = 'none';
-        sparkle.style.zIndex = '9999';
+        sparkle.style.zIndex = '15000'; // High z-index to stay above modals
         sparkle.style.fontSize = '20px';
         sparkle.style.animation = 'fall 1.5s forwards';
         document.body.appendChild(sparkle);
@@ -61,17 +68,27 @@ document.addEventListener('DOMContentLoaded', () => {
         seal.addEventListener('click', (e) => {
             triggerVibration(100);
             createSparkle(e.clientX, e.clientY);
+            
+            // Audio play (standard mobile browser requirement: play on user click)
             if (openSound) openSound.play();
-            if (bgMusic) bgMusic.play().catch(() => {});
+            if (bgMusic) {
+                bgMusic.volume = 0.6; // Set a nice background volume
+                bgMusic.play().catch(err => console.log("Music play blocked:", err));
+            }
+
             wrapper.classList.add('open');
             
+            // Transition from Envelope to Bouquet
             setTimeout(() => {
                 envelopePage.style.opacity = "0";
                 setTimeout(() => {
                     envelopePage.style.display = "none";
                     bouquetPage.classList.remove('hidden');
-                    setTimeout(() => bouquetPage.style.opacity = "1", 50);
-                    if (magicSound) magicSound.play();
+                    // Small delay to allow the "hidden" removal to register for the opacity transition
+                    setTimeout(() => {
+                        bouquetPage.style.opacity = "1";
+                        if (magicSound) magicSound.play();
+                    }, 50);
                 }, 800);
             }, 2200);
         });
@@ -84,20 +101,26 @@ document.addEventListener('DOMContentLoaded', () => {
             createSparkle(e.clientX, e.clientY);
             clickedFlowers.add(index);
             
-            popupImg.src = flower.getAttribute('data-img');
-            modalText.innerText = flower.getAttribute('data-note');
+            // Set Modal Content
+            if (popupImg) popupImg.src = flower.getAttribute('data-img');
+            if (modalText) modalText.innerText = flower.getAttribute('data-note');
             
-            photoModal.classList.remove('modal-hidden');
+            // Show Modal
+            if (photoModal) photoModal.classList.remove('modal-hidden');
 
+            // Check if all flowers discovered
             if (clickedFlowers.size === totalFlowers) {
                 setTimeout(() => {
-                    finalLetterBtn.classList.remove('hidden');
-                    triggerVibration([50, 100, 50]);
+                    if (finalLetterBtn) {
+                        finalLetterBtn.classList.remove('hidden');
+                        triggerVibration([50, 100, 50]);
+                    }
                 }, 800);
             }
         });
     });
 
+    // --- Letter Typewriter Logic ---
     const message = "Alam ko hindi ako expressive na pagkatao, pero gusto kong malaman mo na sobrang mahalaga ka sakin. I love you so much, babyy. Happy Valentine's Day! 💚";
     let isTyping = false;
     let charIndex = 0;
@@ -106,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (charIndex < message.length) {
             typewriterElement.innerHTML += message.charAt(charIndex);
             charIndex++;
-            setTimeout(startTypewriter, 50);
+            setTimeout(startTypewriter, 55); // Adjusted speed slightly for readability
         } else {
             const sig = document.querySelector('.signature');
             if(sig) sig.style.opacity = '1';
@@ -115,18 +138,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (finalLetterBtn) {
         finalLetterBtn.onclick = () => {
-            letterModal.classList.add('letter-modal-show');
-            triggerVibration(60);
-            if (!isTyping) {
-                isTyping = true;
-                setTimeout(startTypewriter, 1000);
+            if (letterModal) {
+                letterModal.classList.add('letter-modal-show');
+                triggerVibration(60);
+                if (!isTyping) {
+                    isTyping = true;
+                    // Wait 1s after modal opens before typing starts
+                    setTimeout(startTypewriter, 1000);
+                }
             }
         };
     }
 
+    // --- Modal Closing Logic ---
     const closeModals = () => {
-        photoModal.classList.add('modal-hidden');
-        letterModal.classList.remove('letter-modal-show');
+        if (photoModal) photoModal.classList.add('modal-hidden');
+        if (letterModal) letterModal.classList.remove('letter-modal-show');
     };
 
     document.querySelectorAll('.close-modal, .close-letter').forEach(btn => {
@@ -136,28 +163,35 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
 
+    // Close on background click
     window.onclick = (e) => {
         if (e.target === photoModal || e.target === letterModal) closeModals();
     };
 
+    // --- Device Tilt Effect (Parallax) ---
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', (event) => {
             const bouquet = document.querySelector('.bouquet');
-            if (bouquet && !bouquetPage.classList.contains('hidden')) {
-                const tiltX = Math.round(event.gamma) / 2;
-                const tiltY = Math.round(event.beta) / 4;
+            // Only tilt if bouquet page is visible
+            if (bouquet && bouquetPage && !bouquetPage.classList.contains('hidden')) {
+                const tiltX = Math.round(event.gamma) / 2; // Horizontal tilt
+                const tiltY = Math.round(event.beta) / 4;  // Vertical tilt
                 bouquet.style.transform = `rotateY(${tiltX}deg) rotateX(${-tiltY}deg)`;
             }
         });
     }
 
+    // --- Mute Logic ---
     if (muteBtn) {
         muteBtn.onclick = () => {
-            bgMusic.muted = !bgMusic.muted;
-            muteBtn.innerText = bgMusic.muted ? "🔇" : "🔊";
+            if (bgMusic) {
+                bgMusic.muted = !bgMusic.muted;
+                muteBtn.innerText = bgMusic.muted ? "🔇" : "🔊";
+            }
         };
     }
 
+    // --- Reset Logic ---
     if (resetBtn) {
         resetBtn.onclick = () => {
             bouquetPage.style.opacity = "0";
@@ -165,9 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // --- Falling Particles (Leaves & Hearts) ---
     setInterval(() => {
         const container = document.getElementById('heart-container');
-        if (!container || bouquetPage.classList.contains('hidden')) return;
+        // Only spawn if bouquet is showing
+        if (!container || !bouquetPage || bouquetPage.classList.contains('hidden')) return;
         
         const p = document.createElement('div');
         p.className = 'heart-particle';
@@ -178,6 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
         p.style.opacity = Math.random();
         p.style.animation = `fall ${(Math.random() * 3 + 4)}s linear forwards`;
         container.appendChild(p);
+        
+        // Cleanup particle
         setTimeout(() => p.remove(), 7000);
     }, 450);
 });
