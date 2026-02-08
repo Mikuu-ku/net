@@ -15,36 +15,46 @@
     box-sizing: border-box; 
     margin: 0; 
     padding: 0; 
+    -webkit-tap-highlight-color: transparent;
 }
 
 body { 
     height: 100vh; 
+    height: 100dvh; /* Uses Dynamic Viewport Height for mobile browsers */
+    width: 100vw;
     overflow: hidden; 
     background: radial-gradient(circle, var(--mint-bg) 0%, var(--mint-shadow) 100%); 
     font-family: 'Georgia', 'Times New Roman', serif; 
     display: flex; 
-    flex-direction: column; 
     justify-content: center; 
     align-items: center; 
 }
 
-/* --- Loading Screen --- */
-#loading-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--mint-bg); z-index: 5000;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    transition: opacity 1s ease-out;
+.main-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.loader-leaf { font-size: 50px; animation: pulseLoader 1.5s infinite; }
-.loading-text { margin-top: 15px; color: var(--forest); font-style: italic; }
 
-@keyframes pulseLoader {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.7; }
+#envelope-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.8s;
 }
 
 /* --- Envelope Logic --- */
-.envelope-wrapper { position: relative; width: 320px; height: 220px; margin-bottom: 40px; }
+.envelope-wrapper { 
+    position: relative; 
+    width: 320px; 
+    height: 220px; 
+    margin: 0 auto 40px auto; /* Centered horizontally with auto margins */
+}
 .envelope-back { position: absolute; width: 100%; height: 100%; background: #40916c; border-radius: 0 0 15px 15px; z-index: 1; }
 .paper { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 85%; background: white; z-index: 2; padding: 30px 15px; border-radius: 5px; text-align: center; transition: 0.8s; }
 .paper-text { font-style: italic; color: var(--forest); font-size: 0.95rem; }
@@ -56,8 +66,7 @@ body {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
     width: 65px; height: 65px; background: var(--emerald); border: none; 
     border-radius: 50%; color: white; font-size: 28px; z-index: 5; 
-    cursor: pointer; box-shadow: 0 0 0 0 var(--leaf-glow);
-    animation: leafPulse 2s infinite; transition: 0.3s;
+    cursor: pointer; animation: leafPulse 2s infinite; transition: 0.3s;
     display: flex; justify-content: center; align-items: center;
 }
 
@@ -73,33 +82,28 @@ body {
 
 /* --- Bouquet Display --- */
 .hidden { display: none !important; opacity: 0; }
-
 .bouquet-display { 
     position: relative; 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    text-align: center;
-    width: 100%;
+    text-align: center; 
+    width: 100%; 
     transition: opacity 0.8s ease;
 }
 
 .fairy-lights { 
-    position: absolute; 
-    top: 130px; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    width: 350px; 
-    height: 350px; 
-    border-radius: 50%; 
+    position: absolute; top: 130px; left: 50%; transform: translate(-50%, -50%); 
+    width: 350px; height: 350px; border-radius: 50%; 
     background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%); 
-    box-shadow: 0 0 60px 10px var(--gold-glow); 
-    z-index: -1; 
-    animation: pulseGlow 3s infinite alternate; 
-    pointer-events: none;
+    box-shadow: 0 0 60px 10px var(--gold-glow); z-index: -1; 
+    animation: pulseGlow 3s infinite alternate; pointer-events: none;
 }
 
-.bouquet { position: relative; width: 250px; height: 320px; z-index: 10; margin-top: 20px; }
+.bouquet { 
+    position: relative; width: 250px; height: 320px; z-index: 10; margin-top: 20px;
+    transition: transform 0.1s ease-out; 
+}
 .flower { border: 2.5px dashed rgba(255,255,255,0.5); cursor: pointer; transition: 0.3s; }
 .flower:hover { transform: scale(1.1) rotate(5deg); filter: brightness(1.2); }
 
@@ -125,12 +129,9 @@ body {
 .instruction { color: var(--forest); font-size: 1rem; font-weight: bold; font-style: italic; text-align: center; animation: textFade 2s infinite alternate; }
 
 .button-group { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
-
 .btn-primary { 
     background: var(--emerald); color: white; border: 1.5px solid var(--sage); 
-    padding: 12px 30px; border-radius: 30px; cursor: pointer; 
-    font-weight: bold; transition: 0.3s; position: relative; z-index: 10;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 12px 30px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s;
 }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 6px 15px var(--leaf-glow); }
 .btn-primary.secondary { background: transparent; color: var(--forest); border: 1.5px solid var(--forest); }
@@ -138,22 +139,20 @@ body {
 #final-letter-btn { animation: pulseGlowBtn 2s infinite alternate; }
 @keyframes pulseGlowBtn { from { box-shadow: 0 0 5px var(--leaf-glow); } to { box-shadow: 0 0 20px var(--sage); } }
 
-/* --- Modals (Polaroid & Letter) --- */
+/* --- Modals --- */
 #photo-modal, #letter-modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); z-index: 3000;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9000;
     display: flex; justify-content: center; align-items: center;
     backdrop-filter: blur(8px); transition: 0.5s;
 }
-
 .modal-hidden, .letter-modal-hidden { visibility: hidden; opacity: 0; pointer-events: none; }
 .letter-modal-show { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
 
-/* Container to hold both card and its close button */
-.polaroid-container {
+/* Fixed Close Buttons Placement - Corner Version */
+.polaroid-container, .letter-content {
     position: relative;
     width: 90%;
-    max-width: 320px;
+    max-width: 340px;
     display: flex;
     justify-content: center;
 }
@@ -161,10 +160,8 @@ body {
 .polaroid-card { 
     background: #fff; padding: 12px 12px 40px 12px; 
     box-shadow: 0 20px 50px rgba(0,0,0,0.6); 
-    transform: rotate(-2deg); 
-    width: 100%;
-    border-radius: 2px;
-    animation: polaroidFloat 3s ease-in-out infinite;
+    transform: rotate(-2deg); width: 100%;
+    border-radius: 2px; animation: polaroidFloat 3s ease-in-out infinite;
 }
 
 @keyframes polaroidFloat {
@@ -172,76 +169,84 @@ body {
     50% { transform: rotate(1deg) translateY(-10px); }
 }
 
-.photo-area { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #eee; }
-.photo-area img { width: 100%; height: 100%; object-fit: cover; }
+.photo-area img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: sepia(0.2) contrast(1.1); }
 #modal-text { font-family: 'Brush Script MT', cursive; font-size: 1.5rem; color: #333; text-align: center; margin-top: 10px; }
 
-/* Close Button Styling */
+/* THE "CORNER" CLOSE BUTTON */
 .close-modal, .close-letter { 
     position: absolute; 
-    top: -50px; 
-    right: 0; 
-    font-size: 35px; 
+    top: -20px; 
+    right: -20px; 
+    font-size: 24px; 
     color: white; 
     cursor: pointer; 
-    z-index: 5001; 
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-    padding: 0;
+    z-index: 9999; 
+    background: var(--emerald);
+    border: 2px solid var(--sage);
+    border-radius: 50%; width: 40px; height: 40px; 
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
 }
 
-.close-modal:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+.close-modal:hover, .close-letter:hover {
+    transform: scale(1.1);
+}
 
-.letter-content { position: relative; width: 90%; max-width: 400px; }
+.letter-content { max-width: 420px; }
 .letter-paper { 
-    background: var(--paper-white); padding: 40px 30px; 
-    border-radius: 2px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-    color: #333; line-height: 1.6;
+    background: var(--paper-white); padding: 40px 30px; border-radius: 2px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: #333; line-height: 1.6;
+    width: 100%;
 }
 .letter-paper h2 { color: var(--emerald); margin-bottom: 20px; font-size: 1.5rem; }
-.signature { margin-top: 30px; font-family: 'Brush Script MT', cursive; font-size: 2.2rem; color: var(--forest); }
+
+/* Signature Styling */
+.signature { 
+    margin-top: 30px; 
+    font-family: 'Brush Script MT', cursive; 
+    font-size: 2.5rem; 
+    color: var(--forest); 
+    opacity: 0; 
+    transition: opacity 2s ease-in;
+    text-align: right;
+}
+
+#typewriter-text::after { content: '|'; animation: blink 0.7s infinite; color: var(--forest); }
 
 .mute-style { 
-    position: fixed; bottom: 20px; right: 20px; 
-    background: var(--emerald); border: 2px solid var(--sage); 
-    border-radius: 50%; width: 45px; height: 45px; 
-    color: white; cursor: pointer; z-index: 2000;
-    display: flex; align-items: center; justify-content: center;
-    transition: 0.3s;
+    position: fixed; bottom: 20px; right: 20px; background: var(--emerald); 
+    border: 2px solid var(--sage); border-radius: 50%; width: 45px; height: 45px; 
+    color: white; cursor: pointer; z-index: 8000; display: flex; align-items: center; justify-content: center;
 }
 
+/* --- Responsive Layout --- */
 @media (max-width: 480px) {
+    .envelope-wrapper { width: 280px; height: 190px; margin-bottom: 30px; }
+    .main-title { font-size: 1.8rem; margin-top: 10px; }
+    .subtitle { font-size: 1rem; margin-bottom: 10px; }
+    .bouquet { transform: scale(0.75); height: 240px; margin-top: 0; }
+    .fairy-lights { width: 250px; height: 250px; top: 110px; }
+    .button-group { flex-direction: column; align-items: center; gap: 10px; }
+    .polaroid-card { padding: 10px 10px 35px 10px; }
+    #modal-text { font-size: 1.2rem; }
+    .letter-paper { padding: 25px 20px; }
+    .letter-paper h2 { font-size: 1.3rem; }
+    
+    .close-modal, .close-letter { 
+        top: -15px; 
+        right: -5px; 
+        width: 35px; 
+        height: 35px; 
+        font-size: 20px;
+    }
+    
     .mute-style { width: 40px; height: 40px; bottom: 15px; right: 15px; }
-    .main-title { font-size: 1.8rem; }
-    .bouquet { transform: scale(0.75); height: 250px; }
-    .polaroid-card { width: 90vw; padding-bottom: 35px; }
-    .close-modal, .close-letter { top: -55px; right: 50%; transform: translateX(50%); }
 }
 
+/* --- Animations --- */
 .heart-particle { position: absolute; top: -10%; pointer-events: none; }
 @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
 @keyframes textFade { from { opacity: 0.4; } to { opacity: 1; } }
 @keyframes pulseGlow { from { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } }
-
-@media (max-width: 480px) {
-    .envelope-wrapper { width: 280px; height: 190px; }
-    .bouquet { transform: scale(0.75); height: 240px; margin-top: 0; }
-    .main-title { font-size: 1.8rem; margin-top: 10px; }
-    .subtitle { font-size: 1rem; margin-bottom: 10px; }
-    .fairy-lights { width: 250px; height: 250px; top: 110px; }
-    .button-group { flex-direction: column; align-items: center; gap: 10px; }
-    
-    .polaroid-card { padding: 10px 10px 35px 10px; }
-    #modal-text { font-size: 1.2rem; }
-    
-    .letter-paper { padding: 25px 20px; }
-    .letter-paper h2 { font-size: 1.3rem; }
-    
-    .close-modal, .close-letter { top: -60px; right: 50%; transform: translateX(50%); }
-}
+@keyframes blink { 50% { opacity: 0; } }
