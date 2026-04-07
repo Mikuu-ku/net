@@ -2,122 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nate🌿</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/jpeg" href="images/me.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Italianno&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="loading-screen">
-        <div class="loader-leaf">💚</div>
-        <p class="loading-text">Preparing your surprise...</p>
-    </div>
-
-    <audio id="openSound" src="audio/paper_rustling.mp3"></audio>
-    <audio id="magicSound" src="audio/chime.mp3"></audio>
-    <audio id="bgMusic" src="audio/Pasilyo.mp3" loop></audio>
-
-    <div id="heart-container"></div>
-    <button id="muteBtn" class="mute-style">🔊</button>
-
-    <div id="photo-modal" class="modal-hidden">
-        <div class="polaroid-container">
-            <span class="close-modal">&times;</span>
-            <div class="polaroid-card">
-                <div class="photo-area">
-                    <img id="popup-img" src="" alt="Memory">
-                </div>
-                <p id="modal-text"></p>
-            </div>
+    <div class="main-viewport">
+        <div class="ui-controls">
+            <button id="backBtn" class="control-btn">← Back</button>
+            <button id="musicToggle" class="control-btn">🎵 Music: Off</button>
         </div>
-    </div>
-
-    <div id="letter-modal" class="letter-modal-hidden">
-        <div class="letter-content">
-            <span class="close-letter">&times;</span>
-            <div class="letter-paper">
-                <h2>My Dearest Pinalangga,</h2>
-                <div id="typewriter-text" class="letter-body"></div>
-                <p class="signature">- Nate</p> 
-            </div>
-        </div>
-    </div>
-
-    <main class="main-container">
         
-        <section id="envelope-page">
-            <div class="envelope-wrapper" id="wrapper">
-                <div class="envelope-back"></div>
-                
-                <div class="paper">
-                    <p class="paper-text">I have a little surprise waiting for you...</p>
-                    
-                    <div id="together-counter" class="counter-style">
-                        <span id="days-value">Loading memories...</span>
-                    </div>
+        <div class="bouquet-scene" id="bouquet">
+            <div id="particle-container"></div>
 
-                    <div class="names-container">
-                        <p class="names">To: My Pinalangga 💚</p>
-                        <p class="names">From: Nate</p>
-                    </div>
-                </div>
+            <div class="outer-wrap-layer"></div>
+            <div class="inner-wrap-layer" id="wrap"></div>
 
-                <div class="envelope-front"></div>
-                <div class="flap"></div>
-                <button class="seal" id="sealButton">💚</button>
-            </div>
-            <h2 class="instruction">TAP THE HEART TO OPEN YOUR GIFT</h2>
-        </section>
-
-        <section id="bouquet-page" class="hidden">
-            <div class="bouquet-display">
-                <div class="fairy-lights"></div>
-                
-                <div class="bouquet" id="mainBouquet">
-                    <div class="flower orchid interactive" 
-                         data-note="Still my favorite co-op partner." 
-                         data-img="images/genshin1.1.png"> 
-                         <div class="orchid-center"></div>
+            <div class="bouquet-contents">
+                <div class="roses-arrangement">
+                    <div class="rose-container o1">
+                        <div class="rose satin-teal"><div class="rose-inner"></div></div>
+                        <div class="stem"></div>
                     </div>
-
-                    <div class="flower tulip t-left interactive" 
-                         data-note="To many more adventures." 
-                         data-img="images/heartopia.jpg"></div>
-                    
-                    <div class="flower tulip t-right interactive" 
-                         data-note="Sweet naman, naol." 
-                         data-img="images/roblox3.jpg"></div>
-
-                    <div class="flower rose r-left interactive" 
-                         data-note="Cute natin dito oh." 
-                         data-img="images/roblox2.jpg">
-                        <div class="rose-inner"></div>
+                    <div class="rose-container o2">
+                        <div class="rose satin-teal"><div class="rose-inner"></div></div>
+                        <div class="stem"></div>
                     </div>
-                    
-                    <div class="flower rose r-right interactive" 
-                         data-note="Just us being chaotic as usual." 
-                         data-img="images/roblox1.png">
-                        <div class="rose-inner"></div>
+                    <div class="rose-container o3">
+                        <div class="rose satin-teal"><div class="rose-inner"></div></div>
+                        <div class="stem"></div>
                     </div>
-                    
-                    <div class="stem">
-                        <div class="leaf leaf-left"></div>
-                        <div class="leaf leaf-right"></div>
+                    <div class="rose-container o4">
+                        <div class="rose satin-teal"><div class="rose-inner"></div></div>
+                        <div class="stem"></div>
                     </div>
-                </div>
-
-                <div class="text-content">
-                    <h1 class="main-title">Happy Valentine's Day!</h1>
-                    <p class="subtitle">Tap the flowers to unlock our memories.</p>
-                    <div class="button-group">
-                        <button id="final-letter-btn" class="btn-primary hidden">Read My Letter ✉️</button>
-                        <button id="resetBtn" class="btn-primary secondary">Back to Start</button>
+                    <div class="rose-container o5">
+                        <div class="rose satin-teal"><div class="rose-inner"></div></div>
+                        <div class="stem"></div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+
+            <div class="photo-popup" id="photoPopup">
+                <img src="images/haha.jpg" alt="Memory">
+            </div>
+
+            <div class="bouquet-ribbon">
+                <div class="marquee-wrapper">
+                    <span class="marquee-text">MISS YOU &nbsp;&nbsp;&nbsp; PALANGGA &nbsp;&nbsp;&nbsp; MISS YOU &nbsp;&nbsp;&nbsp; PALANGGA &nbsp;&nbsp;&nbsp; MISS YOU &nbsp;&nbsp;&nbsp; PALANGGA &nbsp;&nbsp;&nbsp; MISS YOU &nbsp;&nbsp;&nbsp; PALANGGA &nbsp;&nbsp;&nbsp;</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tap-hint">Tap to Bloom</div>
+    </div>
 
     <script src="script.js"></script>
 </body>
